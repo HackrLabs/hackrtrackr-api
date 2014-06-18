@@ -1,0 +1,28 @@
+{
+  "name": "hackrtrackr-api",
+  "version": "0.8.0",
+  "description": "Hackr Trackr API Layer",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/HakrLabs/hackrtrackr-api.git"
+  },
+  "author": "Danny Grove <danny@drgrovellc.com>",
+  "license": "AGPL",
+  "bugs": {
+    "url": "https://github.com/HakrLabs/hackrtrackr-api/issues"
+  },
+  "homepage": "https://github.com/HakrLabs/hackrtrackr-api",
+  "dependencies": {
+    "async": "^0.9.0",
+    "bookshelf": "^0.7.3",
+    "express": "^4.4.3",
+    "express-namespace": "^0.1.1",
+    "knex": "^0.6.15",
+    "pg": "^3.3.0",
+    "redis": "^0.10.3"
+  }
+}
