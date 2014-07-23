@@ -15,7 +15,12 @@
       "type": "string"
     },
     "address": {
-      "type": "object"
+      "type": {
+        "street": "string",
+        "city": "string",
+        "state": "string",
+        "zipCode": "string"
+      }
     },
     "handle": {
       "type": "string",
@@ -24,7 +29,7 @@
     "phone": {
       "type": "string"
     },
-    "joindate": {
+    "joinDate": {
       "type": "date",
       "required": true
     },
@@ -62,15 +67,16 @@
     }
   },
   "validations": [],
-  "relations": {},
-  "acls": [],
-  "methods": [],
-  "options":
-  { "relations":
-    { "Cards":
-      { "type": "hasMany"
-      , "model": "Card"
-      }
+  "relations": {
+    "Cards": {
+      "type": "hasMany",
+      "model": "Card"
+    },
+    "User": {
+      "type": "belongsTo",
+      "model": "User"
     }
-  }
+  },
+  "acls": [],
+  "methods": []
 }
