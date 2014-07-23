@@ -6,7 +6,8 @@
     ]
   },
   "User": {
-    "dataSource": "db"
+    "dataSource": "db",
+    "public": true
   },
   "AccessToken": {
     "dataSource": "db",
@@ -29,6 +30,10 @@
     "public": true
   },
   "Card": {
+    "dataSource": "db",
+    "public": false
+  },
+  "DoorAccess": {
     "dataSource": "db",
     "public": true
   }

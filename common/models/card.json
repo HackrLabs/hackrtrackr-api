@@ -10,10 +10,27 @@
     "uid": {
       "type": "string",
       "required": true
+    },
+    "memberId": {
+      "type": "number",
+      "required": true
     }
   },
   "validations": [],
-  "relations": {},
-  "acls": [],
+  "relations": {
+    "DoorAccess": {
+      "type": "hasMany",
+      "model": "DoorAccess",
+      "foreignKey": "cardId"
+    }
+  },
+  "acls": [
+    {
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW",
+      "accessType": "*"
+    }
+  ],
   "methods": []
 }

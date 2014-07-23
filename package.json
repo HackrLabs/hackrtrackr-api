@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/HakrLabs/hackrtrackr-api",
   "dependencies": {
-    "compression": "^1.0.3",
+    "compression": "^1.0.9",
     "errorhandler": "^1.1.1",
     "loopback": "^2.0.0",
     "loopback-boot": "^2.0.0",
@@ -26,6 +26,6 @@
     "serve-favicon": "^2.0.1"
   },
   "optionalDependencies": {
-    "loopback-explorer": "^1.1.0"
+    "loopback-explorer": "^1.2.4"
   }
 }

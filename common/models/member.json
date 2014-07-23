@@ -64,19 +64,37 @@
     "isActive": {
       "type": "boolean",
       "required": true
+    },
+    "userId": {
+      "type": "number",
+      "required": true
     }
   },
   "validations": [],
   "relations": {
     "Cards": {
       "type": "hasMany",
-      "model": "Card"
+      "model": "Card",
+      "foreignKey": "memberId"
+    },
+    "DoorAccesses": {
+      "type": "hasMany",
+      "model": "DoorAccess",
+      "foreignKey": "memberId"
     },
     "User": {
       "type": "belongsTo",
-      "model": "User"
+      "model": "User",
+      "foreignKey": "userId"
     }
   },
-  "acls": [],
+  "acls": [
+    {
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW",
+      "accessType": "*"
+    }
+  ],
   "methods": []
 }
