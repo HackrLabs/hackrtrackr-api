@@ -67,7 +67,7 @@
   "methods": [],
   "options":
   { "relations":
-    { "cards":
+    { "Cards":
       { "type": "hasMany"
       , "model": "Card"
       }
