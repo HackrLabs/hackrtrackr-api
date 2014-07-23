@@ -1,0 +1,73 @@
+{
+  "name": "Member",
+  "plural": "Members",
+  "base": "PersistedModel",
+  "properties": {
+    "firstName": {
+      "type": "string",
+      "required": true
+    },
+    "lastName": {
+      "type": "string",
+      "required": true
+    },
+    "email": {
+      "type": "string"
+    },
+    "address": {
+      "type": "object"
+    },
+    "handle": {
+      "type": "string",
+      "required": true
+    },
+    "phone": {
+      "type": "string"
+    },
+    "joindate": {
+      "type": "date",
+      "required": true
+    },
+    "dob": {
+      "type": "date",
+      "required": true
+    },
+    "memberLevel": {
+      "type": "String",
+      "required": true
+    },
+    "memberStatus": {
+      "type": "string",
+      "required": true
+    },
+    "wavier": {
+      "type": "boolean",
+      "required": true
+    },
+    "role": {
+      "type": "string",
+      "required": true
+    },
+    "adminLvl": {
+      "type": "number",
+      "required": true
+    },
+    "paperFilledOut": {
+      "type": "boolean",
+      "required": true
+    },
+    "isActive": {
+      "type": "boolean",
+      "required": true
+    },
+    "cards": {
+      "type": [
+        "object"
+      ]
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": []
+}

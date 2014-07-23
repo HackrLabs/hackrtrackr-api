@@ -2,7 +2,7 @@
   "name": "hackrtrackr-api",
   "version": "0.8.0",
   "description": "Hackr Trackr API Layer",
-  "main": "server.js",
+  "main": "server/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -17,13 +17,15 @@
   },
   "homepage": "https://github.com/HakrLabs/hackrtrackr-api",
   "dependencies": {
-    "async": "^0.9.0",
-    "bookshelf": "^0.7.3",
-    "express": "^4.4.3",
-    "express-namespace": "^0.1.1",
-    "knex": "^0.6.15",
-    "mongoose": "^3.8.12",
-    "pg": "^3.3.0",
-    "redis": "^0.10.3"
+    "compression": "^1.0.3",
+    "errorhandler": "^1.1.1",
+    "loopback": "^2.0.0",
+    "loopback-boot": "^2.0.0",
+    "loopback-connector-mongodb": "^1.4.1",
+    "loopback-datasource-juggler": "^2.0.0",
+    "serve-favicon": "^2.0.1"
+  },
+  "optionalDependencies": {
+    "loopback-explorer": "^1.1.0"
   }
 }
