@@ -1,33 +1,61 @@
 'use strict';
 
-var bookshelf = require('./dbconn').DATABASE,
-    config = require('./config'),
-    redis = require('redis'),
-    response = require('./response'),
+var response = require('./response'),
+    mongoose = require('./db').mongoose,
     cards = require('./cards'),
-		async = require('async');
+    db = require('./db').db,
+    Schema = mongoose.Schema,
+    ObjectId = Schema.ObjectId;
 
-// Create a Redis Client
-var redisClient = redis.createClient();
-/**
- * Creates a Member
- */
-var Member = bookshelf.Model.extend(
-    { tableName: 'members'
-    , idAttribute: 'memberid'
-    , cards: function(){
-				return this.hasMany(cards.Card, 'memberid')
-			}
+var Member = db.model
+( 'members'
+, new Schema(
+    { memberid: Number
+    , firstname: String
+    , lastname: String
+    , emailaddress: String
+    , mailingaddress: String
+    , handle: String
+    , phonenumber: String
+    , joindate: Date
+    , dob: Date
+    , memberlevel:
+      { type: String
+      , default: 'maker'
+      , enum:
+        [ 'maker'
+        , 'booster'
+        , 'student'
+        ]
+      }
+    , memberStatus:
+      { type: String
+      , default: 'In Process'
+      , enum:
+        [ 'In Process'
+        , 'Good Standing'
+        , 'Probation'
+        , 'Awaiting Payment'
+        , 'Banned'
+        ]
+      }
+    , wavier: Boolean
+    , role:
+      { type: String
+      , default: 'Member'
+      , enum:
+        [ 'member'
+        , 'founder'
+        ]
+      }
+    , adminlvl: Number
+    , paperfilledout: Boolean
+    , isactive: Boolean
+    , cards: [cards.Card]
     }
-);
-/**
- * Creates a Member Collection
- * @constructor
- */
-var Members = bookshelf.Collection.extend(
-    { model: Member
-    }
-);
+  )
+, 'members'
+)
 
 /**
  * Gets all of the members and their related information from the database and
@@ -41,13 +69,14 @@ var getAll = function(req, res) {
 	var responseOptions = {};
 	responseOptions.callback = req.query.callback || '';
 	responseOptions.format = req.query.format || null;
-	var id = req.route.params.id;
-	new Members()
-		.fetch({withRelated: ['cards']})
-		.then(function(members){
-			var apiServiceResponse = response.createResponse({members: members, count: members.length});
-			response.respondToClient(res, responseOptions, apiServiceResponse);
-		});
+  Member.find({}).populate('cards').exec(function(err, members){
+    if(err){
+      var apiServiceResponse = response.createResponse({message: 'Could not find members'}, true)
+    } else {
+      var apiServiceResponse = response.createResponse({members: members, count: members.length});
+    }
+    response.respondToClient(res, responseOptions, apiServiceResponse);
+  });
 };
 
 /**
@@ -62,15 +91,17 @@ var getById = function(req, res) {
 	var responseOptions = {};
 	responseOptions.callback = req.query.callback || '';
 	responseOptions.format = req.query.format || null;
-	var memberID = req.route.params.memberid;
-	new Member({memberid: memberID})
-		.fetch({withRelated: ['cards']})
-		.then(function(member){
-			var members = [];
-			members.push(member)
-			var apiServiceResponse = response.createResponse({members: members});
-			response.respondToClient(res, responseOptions, apiServiceResponse);
-		});
+	var memberID = req.params.memberid;
+  Member.find({memberid: memberID}).populate('cards').exec(function(err, member){
+    if(!err){
+      var members = [];
+      members.push(member)
+      var apiServiceResponse = response.createResponse({members: members});
+    } else {
+      var apiServiceResponse = response.createResponse({message: 'Could not find member by id'}, true)
+    }
+    response.respondToClient(res, responseOptions, apiServiceResponse);
+  });
 };
 
 /**
@@ -84,23 +115,23 @@ var addMember = function(req, res) {
 	var responseOptions = {};
 	responseOptions.callback = req.query.callback || '';
 	responseOptions.format = req.query.format || null;
-
+  /*
 	var memberData = req.body;
 	var memberID = memberData.memberid;
 	var memberCards = memberData.cards;
 	delete memberData.cards;
 	var member = new Member();
 	member
-		.save(memberData, {patch: true})
-		.then(function(member){
-			var apiServiceResponse = response.createResponse({msg: 'success'})
-			response.respondToClient(res, res.responseOptions, apiServiceResponse)
-		})
-		.otherwise(function(err){
-			var apiServiceResponse = response.createResponse({msg: 'failed', err: err.clientError});
-			response.respondToClient(res, res.responseOptions, apiServiceResponse);
-		})
-
+    .save(memberData, {patch: true})
+    .then(function(member){
+      var apiServiceResponse = response.createResponse({msg: 'success'})
+      response.respondToClient(res, res.responseOptions, apiServiceResponse)
+    })
+    .otherwise(function(err){
+      var apiServiceResponse = response.createResponse({msg: 'failed', err: err.clientError});
+      response.respondToClient(res, res.responseOptions, apiServiceResponse);
+    })
+  */
 }
 
 /**
@@ -114,6 +145,7 @@ var updateMember = function(req, res) {
 	var memberData = req.body;
 	var memberID = memberData.memberid;
 	var memberCards = memberData.cards;
+  /*
 	delete memberData.cards;
 	var member = new Member({memberid: memberID});
 	member
@@ -133,6 +165,7 @@ var updateMember = function(req, res) {
 				var apiServiceResponse = response.createResponse({msg: 'failed', error: err}, true)
 				response.respondToClient(res, res.responseOptions, apiServiceResponse);
 		})
+    */
 }
 
 /**
@@ -145,6 +178,7 @@ var updateMember = function(req, res) {
 var removeMember = function(req, res) {
 	var memberID = req.params.memberid
 	console.log(memberID)
+  /*
 	new Member({memberid: memberID})
 		.destroy()
 		.then(function(mem){
@@ -159,6 +193,7 @@ var removeMember = function(req, res) {
 			var apiServiceResponse = response.createResponse({msg: 'failed', error: err}, true);
 			response.respondToClient(res, res.responseOptions, apiServiceResponse)
 		})
+    */
 };
 
 /**
@@ -174,6 +209,7 @@ var toggleEnabled = function(req, res) {
 	responseOptions.format = req.query.format || null;
 
 	var id = req.params.memberid;
+  /*
 	new Member({memberid: id})
 		.fetch()
 		.then(function(member){
@@ -191,9 +227,11 @@ var toggleEnabled = function(req, res) {
 					response.respondToClient(res,responseOptions,apiServiceResponse);
 				})
 		})
+    *?
 };
 
 var updateMemberCards = function(cards, callback) {
+  /*
 	async.forEach(cards, function(memberCard, cb){
 		if (memberCard.cardType == 'rfid' && typeof memberCard.card == Number) {
 			memberCard.card = cards.convertCardToHex(memberCard.card)
@@ -212,11 +250,11 @@ var updateMemberCards = function(cards, callback) {
 			callback.call(this, err)
 		}
 	})
+  */
 }
 
 module.exports =
 { Member: Member
-, Members: Members
 , add: addMember
 , remove: removeMember
 , toggleEnabled: toggleEnabled

@@ -1,23 +1,27 @@
 'use strict';
+var response = require('./response'),
+    mongoose = require('./db').mongoose,
+    db = require('./db').db,
+    Schema = mongoose.Schema,
+    config = require("./config"),
+    ObjectId = Schema.ObjectId;
 
-var bookshelf = require('./dbconn').DATABASE,
-	bkshlfEvents = require('bookshelf').Events,
-	response = require('./response'),
-    config = require("./config");
-
-var Card = bookshelf.Model.extend(
-    { tableName: 'cards'
-    , idAttribute: 'id'
-    , member: function(){
-            return this.belongsTo(Member)
-        }
+var CardSchema = new Schema
+(
+  { memberid:
+    { type: Schema.Types.ObjectId
+    , ref: 'members'
     }
-);
+  , cardtype: String
+  , cardid: String
+  }
+)
+var Card = db.model
+( 'cards'
+, CardSchema
+, 'cards'
+)
 
-var CardCollection = bookshelf.Collection.extend(
-    { model: Card
-    }
-);
 
 var addCard = function(req, res) {
 		var card = req.body;
@@ -73,7 +77,7 @@ var convertCardToHex = function(card){
 
 module.exports =
 { Card: Card
-, CardCollection: CardCollection
+, CardSchema: CardSchema
 , addCard: addCard
 , removeCard: removeCard
 };
