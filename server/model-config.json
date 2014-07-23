@@ -27,5 +27,9 @@
   "Member": {
     "dataSource": "db",
     "public": true
+  },
+  "Card": {
+    "dataSource": "db",
+    "public": true
   }
 }

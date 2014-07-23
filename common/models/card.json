@@ -1,0 +1,19 @@
+{
+  "name": "Card",
+  "plural": "Cards",
+  "base": "PersistedModel",
+  "properties": {
+    "cardType": {
+      "type": "string",
+      "required": true
+    },
+    "uid": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": []
+}

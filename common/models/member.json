@@ -59,15 +59,18 @@
     "isActive": {
       "type": "boolean",
       "required": true
-    },
-    "cards": {
-      "type": [
-        "object"
-      ]
     }
   },
   "validations": [],
   "relations": {},
   "acls": [],
-  "methods": []
+  "methods": [],
+  "options":
+  { "relations":
+    { "cards":
+      { "type": "hasMany"
+      , "model": "Card"
+      }
+    }
+  }
 }
