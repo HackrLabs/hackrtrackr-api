@@ -1,8 +1,8 @@
-var express = require('express'),
-  members = require('./libs/members'),
-  config = require('./libs/config')
-
-require('express-namespace')
+var koa = require('koa'),
+    bodyParser = require('koa-body-parser'),
+    config = require('./libs/config'),
+    routes = require('./routes/index'),
+    app = koa()
 
 var allowCrossDomain = function(req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
@@ -24,26 +24,48 @@ var setResponseOptions = function(req, res, next) {
 	res.responseOptions = responseOptions;
 	next();
 }
-var app = express();
-app.set('domain', config.app.domain);
-app.use(allowCrossDomain);
-app.use(setResponseOptions)
-app.namespace(config.app.namespace, function(){
-  /*
-  app.get('/dooraccess', doorAccess.getAll);
-  app.get('/dooraccess/:id', doorAccess.getByMemberId);
-  app.get('/areas', areas.findAll);
-  app.get('/areas/:id', areas.getById);
-  */
-  app.get('/members', members.getAll);
-  app.get('/members/:memberid', members.getById);
-  app.post('/members/add/', members.add);
-  app.post('/members/update/', members.update);
-  app.delete('/members/remove/:memberid', members.remove)
-  app.post('/members/toggleEnabled/:memberid', members.toggleEnabled);
-  //app.post('/members/cards/add', cards.addCard);
-  //app.delete('/members/cards/remove/:id', cards.removeCard);
-  //app.get('/employees', employees.getAll)
-});
-app.listen(config.app.port);
-console.log('Listening on port ' + config.app.port);
+
+// X-Response-Time
+app.use(function *(next){
+  var start = new Date
+  yield next
+  var ms = new Date - start
+  this.set('X-Response-Time', ms + 'ms')
+})
+
+// Logger
+app.use(function *(next){
+  var start = new Date
+  yield next
+  var ms = new Date - start
+  console
+  .log
+  ( '%s - %s %s - %s - %s ms'
+  , start.toUTCString()
+  , this.method
+  , this.url
+  , this.status
+  , ms
+  )
+})
+
+// Body
+app.use(bodyParser())
+
+// Error Handling
+app.use(function *(next){
+  try {
+    yield next
+  } catch(e) {
+    console.error(e.stack || e)
+    this.status = e.status || 500
+    this.body = {error: true, msg: e.toString()}
+    this.app.emit('Error: ', e, this)
+  }
+})
+
+app.use(routes().routes())
+
+app.listen(config.app.port, config.app.host, function() {
+  console.log('Listening on http://%s:%s', config.app.host, config.app.port)
+})

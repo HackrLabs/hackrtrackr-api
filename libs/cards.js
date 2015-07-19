@@ -1,26 +1,9 @@
 'use strict';
-var response = require('./response'),
-    mongoose = require('./db').mongoose,
-    db = require('./db').db,
+var mongoose = require('../../libs/db').mongoose,
+    db = require('../../libs/db').db,
+    config = require("../../libs/config"),
     Schema = mongoose.Schema,
-    config = require("./config"),
     ObjectId = Schema.ObjectId;
-
-var CardSchema = new Schema
-(
-  { memberid:
-    { type: Schema.Types.ObjectId
-    , ref: 'members'
-    }
-  , cardtype: String
-  , cardid: String
-  }
-)
-var Card = db.model
-( 'cards'
-, CardSchema
-, 'cards'
-)
 
 
 var addCard = function(req, res) {
@@ -76,8 +59,6 @@ var convertCardToHex = function(card){
 }
 
 module.exports =
-{ Card: Card
-, CardSchema: CardSchema
-, addCard: addCard
+{ addCard: addCard
 , removeCard: removeCard
 };

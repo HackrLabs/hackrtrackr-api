@@ -1,6 +1,6 @@
 {
   "name": "hackrtrackr-api",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "description": "Hackr Trackr API Layer",
   "main": "server.js",
   "scripts": {
@@ -17,13 +17,19 @@
   },
   "homepage": "https://github.com/HakrLabs/hackrtrackr-api",
   "dependencies": {
-    "async": "^0.9.0",
-    "bookshelf": "^0.7.3",
-    "express": "^4.4.3",
-    "express-namespace": "^0.1.1",
-    "knex": "^0.6.15",
-    "mongoose": "^3.8.12",
-    "pg": "^3.3.0",
-    "redis": "^0.10.3"
+    "bcrypt-schema": "^0.1.3",
+    "bcryptjs": "^2.2.0",
+    "co": "^4.6.0",
+    "jsonwebtoken": "^5.0.2",
+    "jwt-simple": "^0.3.0",
+    "koa": "^0.21.0",
+    "koa-body-parser": "^1.1.2",
+    "koa-bodyparser": "^2.0.0",
+    "koa-router": "^5.1.2",
+    "mongoose": "^4.0.0",
+    "mongoose-bcrypt": "^1.2.3",
+    "mysql": "^2.8.0",
+    "redis": "^0.10.3",
+    "sequelize": "^3.4.1"
   }
 }
